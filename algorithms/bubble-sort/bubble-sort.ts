@@ -8,7 +8,7 @@ const array1DTracer = new Array1DTracer("Array");
 const logTracer = new LogTracer("Log");
 const scheduler = new Scheduler(array1DTracer, logTracer);
 
-const array = new Array1DRandomizer(5, 0, 10).array;
+const array = new Array1DRandomizer(10, 0, 10).array;
 
 function BubbleSort(array: Array<number>): void {
     const n = array.length;
