@@ -45,5 +45,5 @@ function BubbleSort(array: Array<number>): void {
 
     BubbleSort(array);
 
-    console.log(scheduler.generateSchedules());
+    console.log(JSON.stringify(scheduler.generateSchedules(), null, 2));
 })();

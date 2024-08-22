@@ -53,5 +53,5 @@ function SelectionSort(array: Array<number>): void {
 
     SelectionSort(array);
 
-    console.log(scheduler.generateSchedules());
+    console.log(JSON.stringify(scheduler.generateSchedules(), null, 2));
 })();
