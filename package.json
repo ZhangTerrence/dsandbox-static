@@ -1,0 +1,7 @@
+{
+  "name": "dsandbox-static",
+  "description": "Static files for dsandbox.",
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  }
+}
