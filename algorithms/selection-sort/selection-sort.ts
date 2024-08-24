@@ -6,52 +6,55 @@ import Scheduler from "./Scheduler";
 
 const array1DTracer = new Array1DTracer("Array");
 const logTracer = new LogTracer("Log");
-const scheduler = new Scheduler(array1DTracer, logTracer);
-
-const array = new Array1DRandomizer(10, 0, 10).array;
 
 function SelectionSort(array: Array<number>): void {
     const n = array.length;
 
+    logTracer.print(`initial array - [${array.join(", ")}]`);
     array1DTracer.captureState();
-    logTracer.print(`Initial array - [${array.join(", ")}]`);
 
     for (let i = 0; i < n; i++) {
         let minIndex = i;
 
         for (let j = i + 1; j < n; j++) {
-            array1DTracer.select([i, j, minIndex]);
-            logTracer.print(`i: ${i}, j: ${j}, minIndex: ${minIndex}`);
-            array1DTracer.unselect([i, j, minIndex], false);
-
-            array1DTracer.nop();
-            logTracer.print(`Comparing indexes minIndex ${minIndex} and j ${j}: ${array[minIndex]} and ${array[j]}`);
-
+            logTracer.print("comparing indexes j and minIndex");
+            array1DTracer.select([j, j + 1], {
+                i: i,
+                j: j,
+                minIndex: minIndex
+            });
             if (array[j] < array[minIndex]) {
-                array1DTracer.nop();
-                logTracer.print(`Updating minIndex to j.`);
-
+                logTracer.print("setting index minIndex to index j");
+                array1DTracer.captureState({
+                    i: i,
+                    j: j,
+                    minIndex: j,
+                });
                 minIndex = j;
             }
         }
 
-        array1DTracer.swap(i, minIndex);
-        logTracer.print(`Swapping indexes i and minIndex: ${array[i]} and ${array[minIndex]}`);
-
+        logTracer.print("swapping values at indexes i and minIndex");
+        array1DTracer.swap(i, minIndex, {
+            i: i,
+            j: j,
+            minIndex: minIndex,
+        });
         [array[i], array[minIndex]] = [array[minIndex], array[i]];
 
-        array1DTracer.nop();
-        logTracer.print(`Updated array - [${array.join(", ")}]`);
+        logTracer.print(`updated array - [${array.join(", ")}]`);
+        array1DTracer.captureState({
+            i: i,
+            j: j,
+        });
     }
 
+    logTracer.print(`sorted array - [${array.join(", ")}]`);
     array1DTracer.captureState();
-    logTracer.print(`Sorted array - [${array.join(", ")}]`);
 }
 
 (function main() {
-    array1DTracer.setArray(array);
-
+    array1DTracer.setArray(new Array1DRandomizer(10, 0, 10).getArray());
     SelectionSort(array);
-
-    console.log(JSON.stringify(scheduler.generateSchedules(), null, 2));
+    (new Scheduler(array1DTracer, logTracer)).run();
 })();

@@ -6,44 +6,43 @@ import Scheduler from "./Scheduler";
 
 const array1DTracer = new Array1DTracer("Array");
 const logTracer = new LogTracer("Log");
-const scheduler = new Scheduler(array1DTracer, logTracer);
-
-const array = new Array1DRandomizer(10, 0, 10).array;
 
 function BubbleSort(array: Array<number>): void {
     const n = array.length;
 
+    logTracer.print(`initial array - [${array.join(", ")}]`);
     array1DTracer.captureState();
-    logTracer.print(`Initial array - [${array.join(", ")}]`);
 
     for (let i = 0; i < n - 1; i++) {
         for (let j = 0; j < n - i - 1; j++) {
-            array1DTracer.select([i, j]);
-            logTracer.print(`i: ${i}, j: ${j}`);
-            array1DTracer.unselect([i, j], false);
-
-            array1DTracer.nop();
-            logTracer.print(`Comparing indexes j and j + 1: ${array[j]} and ${array[j + 1]}`);
-
+            logTracer.print("comparing indexes j and j + 1");
+            array1DTracer.select([j, j + 1], {
+                i: i,
+                j: j,
+            });
             if (array[j] > array[j + 1]) {
-                array1DTracer.swap(j, j + 1);
-                logTracer.print(`Swapping indexes j and j + 1: ${array[j]} and ${array[j + 1]}`);
+                logTracer.print("swapping values at indexes j and j + 1");
+                array1DTracer.swap(j, j + 1, {
+                    i: i,
+                    j: j
+                });
                 [array[j], array[j + 1]] = [array[j + 1], array[j]];
 
-                array1DTracer.nop();
-                logTracer.print(`Updated array - [${array.join(", ")}]`);
+                logTracer.print(`updated array - [${array.join(", ")}]`);
+                array1DTracer.captureState({
+                    i: i,
+                    j: j,
+                });
             }
         }
     }
 
+    logTracer.print(`sorted array - [${array.join(", ")}]`);
     array1DTracer.captureState();
-    logTracer.print(`Sorted array - [${array.join(", ")}]`);
 }
 
 (function main() {
-    array1DTracer.setArray(array);
-
+    array1DTracer.setArray((new Array1DRandomizer(10, 0, 10)).getArray());
     BubbleSort(array);
-
-    console.log(JSON.stringify(scheduler.generateSchedules(), null, 2));
+    (new Scheduler(array1DTracer, logTracer)).run();
 })();
