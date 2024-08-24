@@ -13,10 +13,12 @@ function SelectionSort(array: Array<number>): void {
   logTracer.print(`initial array - [${array.join(", ")}]`);
   array1DTracer.captureState();
 
-  for (let i = 0; i < n; i++) {
+  let i = 0;
+  let j = 0;
+  for (; i < n; i++) {
     let minIndex = i;
 
-    for (let j = i + 1; j < n; j++) {
+    for (j = i + 1; j < n; j++) {
       logTracer.print("comparing indexes j and minIndex");
       array1DTracer.select([j, j + 1], {
         i: i,
@@ -54,7 +56,8 @@ function SelectionSort(array: Array<number>): void {
 }
 
 (function main() {
-  array1DTracer.setArray(new Array1DRandomizer(10, 0, 10).getArray());
-  SelectionSort(array);
+  const array = new Array1DRandomizer(10, 0, 10).getArray();
+  array1DTracer.setArray(structuredClone(array));
+  SelectionSort(structuredClone(array));
   new Scheduler(array1DTracer, logTracer).run();
 })();

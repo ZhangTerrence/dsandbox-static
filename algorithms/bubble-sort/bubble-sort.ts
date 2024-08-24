@@ -42,7 +42,8 @@ function BubbleSort(array: Array<number>): void {
 }
 
 (function main() {
-  array1DTracer.setArray(new Array1DRandomizer(10, 0, 10).getArray());
-  BubbleSort(array);
+  const array = new Array1DRandomizer(10, 0, 10).getArray();
+  array1DTracer.setArray(structuredClone(array));
+  BubbleSort(structuredClone(array));
   new Scheduler(array1DTracer, logTracer).run();
 })();
