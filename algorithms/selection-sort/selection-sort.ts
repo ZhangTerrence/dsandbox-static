@@ -13,7 +13,7 @@ const array = new Array1DRandomizer(10, 0, 10).array;
 function SelectionSort(array: Array<number>): void {
     const n = array.length;
 
-    array1DTracer.nop();
+    array1DTracer.captureState();
     logTracer.print(`Initial array - [${array.join(", ")}]`);
 
     for (let i = 0; i < n; i++) {
