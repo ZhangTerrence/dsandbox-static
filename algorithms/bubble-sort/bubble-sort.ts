@@ -1,10 +1,11 @@
-// @ts-nocheck
 import Array1DRandomizer from "./randomizers/Array1DRandomizer";
 import Array1DTracer from "./tracers/Array1DTracer";
+import ChartTracer from "./tracers/ChartTracer";
 import LogTracer from "./tracers/LogTracer";
 import Scheduler from "./Scheduler";
 
 const array1DTracer = new Array1DTracer("Array");
+const chartTracer = new ChartTracer("Chart");
 const logTracer = new LogTracer("Log");
 
 function BubbleSort(array: Array<number>): void {
@@ -45,5 +46,6 @@ function BubbleSort(array: Array<number>): void {
   const array = new Array1DRandomizer(10, 0, 10).getArray();
   array1DTracer.setArray(structuredClone(array));
   BubbleSort(structuredClone(array));
-  new Scheduler(array1DTracer, logTracer).run();
+  chartTracer.fromArray1DTracer(array1DTracer);
+  new Scheduler(chartTracer, array1DTracer, logTracer).run();
 })();
