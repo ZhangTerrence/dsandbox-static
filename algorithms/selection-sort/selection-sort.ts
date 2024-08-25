@@ -19,7 +19,7 @@ function SelectionSort(array: Array<number>): void {
     let minIndex = i;
 
     for (j = i + 1; j < n; j++) {
-      logTracer.print("comparing indexes j and minIndex");
+      logTracer.print("comparing values at indexes j and minIndex");
       array1DTracer.select([j, minIndex], {
         i: i,
         j: j,
