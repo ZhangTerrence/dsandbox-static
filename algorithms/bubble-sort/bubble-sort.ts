@@ -17,7 +17,7 @@ function BubbleSort(array: Array<number>): void {
   for (let i = 0; i < n - 1; i++) {
     for (let j = 0; j < n - i - 1; j++) {
       logTracer.print("comparing values at indexes j and j + 1");
-      array1DTracer.select([j, j + 1], {
+      array1DTracer.select([i, j, j + 1], {
         i: i,
         j: j,
       });
@@ -43,7 +43,7 @@ function BubbleSort(array: Array<number>): void {
 }
 
 (function main() {
-  const array = new Array1DRandomizer(10, 0, 10).getArray();
+  const array = new Array1DRandomizer(10, 1, 50).getArray();
   array1DTracer.setArray(structuredClone(array));
   BubbleSort(structuredClone(array));
   chartTracer.fromArray1DTracer(array1DTracer);
