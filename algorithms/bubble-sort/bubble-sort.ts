@@ -2,7 +2,7 @@ import Array1DRandomizer from "./randomizers/Array1DRandomizer";
 import Array1DTracer from "./tracers/Array1DTracer";
 import ChartTracer from "./tracers/ChartTracer";
 import LogTracer from "./tracers/LogTracer";
-import Scheduler from "./Scheduler";
+import Runner from "./Runner";
 
 const array1DTracer = new Array1DTracer("Array");
 const chartTracer = new ChartTracer("Chart");
@@ -45,7 +45,10 @@ function BubbleSort(array: Array<number>): void {
 (function main() {
   const array = new Array1DRandomizer(10, 1, 50).getArray();
   array1DTracer.setArray(structuredClone(array));
+
   BubbleSort(structuredClone(array));
+
   chartTracer.fromArray1DTracer(array1DTracer);
-  new Scheduler(chartTracer, array1DTracer, logTracer).run();
+  const runner = new Runner(chartTracer, array1DTracer, logTracer);
+  runner.runSnippets();
 })();
