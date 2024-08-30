@@ -2,53 +2,64 @@ import Array1DRandomizer from "./randomizers/Array1DRandomizer";
 import Array1DTracer from "./tracers/Array1DTracer";
 import ChartTracer from "./tracers/ChartTracer";
 import LogTracer from "./tracers/LogTracer";
-import Runner from "./Runner";
+import { Tracers } from "./utilities";
 
-const array1DTracer = new Array1DTracer("Array");
-const chartTracer = new ChartTracer("Chart");
-const logTracer = new LogTracer("Log");
+export default class Snippet {
+  tracers: Tracers;
 
-function BubbleSort(array: Array<number>): void {
-  const n = array.length;
+  constructor() {
+    this.tracers = new Tracers();
+    this.tracers.addArray1DTracer("Array");
+    this.tracers.addChartTracer("Chart");
+    this.tracers.addLogTracer("Log");
 
-  logTracer.print(`initial array - [${array.join(", ")}]`);
-  array1DTracer.captureState();
+    const rng = new Array1DRandomizer(10, 1, 50);
+    const array = rng.getArray();
+    (this.tracers.get("Array") as Array1DTracer).setArray(structuredClone(array));
 
-  for (let i = 0; i < n - 1; i++) {
-    for (let j = 0; j < n - i - 1; j++) {
-      logTracer.print("comparing values at indexes j and j + 1");
-      array1DTracer.select([i, j, j + 1], {
-        i: i,
-        j: j,
-      });
-      if (array[j] > array[j + 1]) {
-        logTracer.print("swapping values at indexes j and j + 1");
-        array1DTracer.swap(j, j + 1, {
-          i: i,
-          j: j,
-        });
-        [array[j], array[j + 1]] = [array[j + 1], array[j]];
+    this.BubbleSort(array);
 
-        logTracer.print(`updated array - [${array.join(", ")}]`);
-        array1DTracer.captureState({
-          i: i,
-          j: j,
-        });
-      }
-    }
+    (this.tracers.get("Chart") as ChartTracer).fromArray1DTracer(this.tracers.get("Array"));
   }
 
-  logTracer.print(`sorted array - [${array.join(", ")}]`);
-  array1DTracer.captureState();
+  BubbleSort(array: Array<number>): void {
+    const n = array.length;
+
+    // trace {
+    (this.tracers.get("Log") as LogTracer).print(`initial array - [${array.join(", ")}]`);
+    (this.tracers.get("Array") as Array1DTracer).captureState();
+    // }
+    for (let i = 0; i < n - 1; i++) {
+      for (let j = 0; j < n - i - 1; j++) {
+        // trace {
+        (this.tracers.get("Log") as LogTracer).print("comparing values at indexes j and j + 1");
+        (this.tracers.get("Array") as Array1DTracer).select([i, j, j + 1], {
+          i: i,
+          j: j,
+        });
+        // }
+        if (array[j] > array[j + 1]) {
+          // trace {
+          (this.tracers.get("Log") as LogTracer).print("swapping values at indexes j and j + 1");
+          (this.tracers.get("Array") as Array1DTracer).swap(j, j + 1, {
+            i: i,
+            j: j,
+          });
+          // }
+          [array[j], array[j + 1]] = [array[j + 1], array[j]];
+        }
+        // trace {
+        (this.tracers.get("Log") as LogTracer).print(`updated array - [${array.join(", ")}]`);
+        (this.tracers.get("Array") as Array1DTracer).captureState({
+          i: i,
+          j: j,
+        });
+        // }
+      }
+    }
+    // trace {
+    (this.tracers.get("Log") as LogTracer).print(`sorted array - [${array.join(", ")}]`);
+    (this.tracers.get("Array") as Array1DTracer).captureState();
+    // }
+  }
 }
-
-(function main() {
-  const array = new Array1DRandomizer(10, 1, 50).getArray();
-  array1DTracer.setArray(structuredClone(array));
-
-  BubbleSort(structuredClone(array));
-
-  chartTracer.fromArray1DTracer(array1DTracer);
-  const runner = new Runner(chartTracer, array1DTracer, logTracer);
-  runner.runSnippets();
-})();

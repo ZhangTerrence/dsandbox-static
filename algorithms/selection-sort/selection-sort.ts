@@ -2,67 +2,80 @@ import Array1DRandomizer from "./randomizers/Array1DRandomizer";
 import Array1DTracer from "./tracers/Array1DTracer";
 import ChartTracer from "./tracers/ChartTracer";
 import LogTracer from "./tracers/LogTracer";
-import Runner from "./Runner";
+import { Tracers } from "./utilities";
 
-const array1DTracer = new Array1DTracer("Array");
-const chartTracer = new ChartTracer("Chart");
-const logTracer = new LogTracer("Log");
+export default class Snippet {
+  tracers: Tracers;
 
-function SelectionSort(array: Array<number>): void {
-  const n = array.length;
+  constructor() {
+    this.tracers = new Tracers();
+    this.tracers.addArray1DTracer("Array");
+    this.tracers.addChartTracer("Chart");
+    this.tracers.addLogTracer("Log");
 
-  logTracer.print(`initial array - [${array.join(", ")}]`);
-  array1DTracer.captureState();
+    const rng = new Array1DRandomizer(10, 1, 50);
+    const array = rng.getArray();
+    (this.tracers.get("Array") as Array1DTracer).setArray(structuredClone(array));
 
-  let i = 0;
-  let j = 0;
-  for (; i < n; i++) {
-    let minIndex = i;
+    this.SelectionSort(array);
 
-    for (j = i + 1; j < n; j++) {
-      logTracer.print("comparing values at indexes j and minIndex");
-      array1DTracer.select([i, j, minIndex], {
+    (this.tracers.get("Chart") as ChartTracer).fromArray1DTracer(this.tracers.get("Array"));
+  }
+
+  SelectionSort(array: Array<number>): void {
+    const n = array.length;
+
+    // trace {
+    (this.tracers.get("Log") as LogTracer).print(`initial array - [${array.join(", ")}]`);
+    (this.tracers.get("Array") as Array1DTracer).captureState();
+    // }
+    let i = 0;
+    let j = 0;
+    for (; i < n; i++) {
+      let minIndex = i;
+
+      for (j = i + 1; j < n; j++) {
+        // trace {
+        (this.tracers.get("Log") as LogTracer).print("comparing values at indexes j and minIndex");
+        (this.tracers.get("Array") as Array1DTracer).select([i, j, minIndex], {
+          i: i,
+          j: j,
+          minIndex: minIndex,
+        });
+        // }
+        if (array[j] < array[minIndex]) {
+          // trace {
+          (this.tracers.get("Log") as LogTracer).print("setting index minIndex to index j");
+          (this.tracers.get("Array") as Array1DTracer).captureState({
+            i: i,
+            j: j,
+            minIndex: j,
+          });
+          // }
+          minIndex = j;
+        }
+      }
+      // trace {
+      (this.tracers.get("Log") as LogTracer).print("swapping values at indexes i and minIndex");
+      (this.tracers.get("Array") as Array1DTracer).swap(i, minIndex, {
         i: i,
         j: j,
         minIndex: minIndex,
       });
-      if (array[j] < array[minIndex]) {
-        logTracer.print("setting index minIndex to index j");
-        array1DTracer.captureState({
-          i: i,
-          j: j,
-          minIndex: j,
-        });
-        minIndex = j;
-      }
+      // }
+      [array[i], array[minIndex]] = [array[minIndex], array[i]];
+
+      // trace {
+      (this.tracers.get("Log") as LogTracer).print(`updated array - [${array.join(", ")}]`);
+      (this.tracers.get("Array") as Array1DTracer).captureState({
+        i: i,
+        j: j,
+      });
+      // }
     }
-
-    logTracer.print("swapping values at indexes i and minIndex");
-    array1DTracer.swap(i, minIndex, {
-      i: i,
-      j: j,
-      minIndex: minIndex,
-    });
-    [array[i], array[minIndex]] = [array[minIndex], array[i]];
-
-    logTracer.print(`updated array - [${array.join(", ")}]`);
-    array1DTracer.captureState({
-      i: i,
-      j: j,
-    });
+    // trace {
+    (this.tracers.get("Log") as LogTracer).print(`sorted array - [${array.join(", ")}]`);
+    (this.tracers.get("Array") as Array1DTracer).captureState();
+    // }
   }
-
-  logTracer.print(`sorted array - [${array.join(", ")}]`);
-  array1DTracer.captureState();
 }
-
-(function main() {
-  const array = new Array1DRandomizer(10, 1, 50).getArray();
-  array1DTracer.setArray(structuredClone(array));
-
-  SelectionSort(structuredClone(array));
-
-  chartTracer.fromArray1DTracer(array1DTracer);
-  const runner = new Runner(chartTracer, array1DTracer, logTracer);
-  runner.runSnippets();
-})();

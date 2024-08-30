@@ -23,13 +23,13 @@ namespace dsandbox
             auto const array = rng.get_array();
             std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->set_array(array);
 
-            bubble_sort(array);
+            selection_sort(array);
 
             std::dynamic_pointer_cast<ChartTracer>(this->tracers->get("Chart"))->from_array_1d_tracer(
                 *std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array")));
         }
 
-        void bubble_sort(std::vector<int> array) const
+        void selection_sort(std::vector<int> array) const
         {
             int const n = array.size();
 
@@ -38,34 +38,46 @@ namespace dsandbox
                 template_string(std::vector<std::string>{"initial array - ", to_array_string(array)}));
             std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->capture_state({});
             // }
-            for (int i = 0; i < n - 1; i++)
+            int i = 0;
+            int j = 0;
+            for (; i < n; i++)
             {
-                for (int j = 0; j < n - i - 1; j++)
+                int minIndex = i;
+
+                for (j = i + 1; j < n; j++)
                 {
                     // trace {
                     std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
-                        "comparing values at indexes j and j + 1");
+                        "comparing values at indexes j and minIndex");
                     std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->select(
-                        std::vector{i, j, j + 1}, {{"i", i}, {"j", j}});
+                        std::vector{i, j, minIndex}, {{"i", i}, {"j", j}, {"minIndex", minIndex}});
                     // }
-                    if (array[j] > array[j + 1])
+                    if (array[j] < array[minIndex])
                     {
                         // trace {
                         std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
-                            "swapping values at indexes j and j + 1");
-                        std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->swap(
-                            j, j + 1, {{"i", i}, {"j", j}});
+                            "setting index minIndex to index j");
+                        std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->capture_state(
+                            {{"i", i}, {"j", j}, {"minIndex", minIndex}});
                         // }
-                        std::swap(array[j], array[j + 1]);
+                        minIndex = j;
                     }
-                    // trace {
-                    std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
-                        template_string(std::vector<std::string>{"updated array - ", to_array_string(array)}));
-                    std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->capture_state({
-                        {"i", i}, {"j", j}
-                    });
-                    // }
                 }
+                // trace {
+                std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
+                    "swapping values at indexes i and minIndex");
+                std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->swap(
+                    i, minIndex, {{"i", i}, {"j", j}, {"minIndex", minIndex}});
+                // }
+                std::swap(array[i], array[minIndex]);
+
+                // trace {
+                std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
+                    template_string(std::vector<std::string>{"updated array - ", to_array_string(array)}));
+                std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->capture_state({
+                    {"i", i}, {"j", j}
+                });
+                // }
             }
             // trace {
             std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
