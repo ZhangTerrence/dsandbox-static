@@ -19,7 +19,7 @@ export default class Snippet {
 
     this.BubbleSort(array);
 
-    (this.tracers.get("Chart") as ChartTracer).fromArray1DTracer(this.tracers.get("Array"));
+    (this.tracers.get("Chart") as ChartTracer).fromArray1DTracer(this.tracers.get("Array") as Array1DTracer);
   }
 
   BubbleSort(array: Array<number>): void {

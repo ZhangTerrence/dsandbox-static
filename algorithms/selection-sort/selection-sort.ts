@@ -19,7 +19,7 @@ export default class Snippet {
 
     this.SelectionSort(array);
 
-    (this.tracers.get("Chart") as ChartTracer).fromArray1DTracer(this.tracers.get("Array"));
+    (this.tracers.get("Chart") as ChartTracer).fromArray1DTracer(this.tracers.get("Array") as Array1DTracer);
   }
 
   SelectionSort(array: Array<number>): void {
