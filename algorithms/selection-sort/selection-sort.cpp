@@ -48,7 +48,7 @@ namespace dsandbox
                 {
                     // trace {
                     std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
-                        "comparing values at indexes j and minIndex");
+                        "comparing array[j] and array[minIndex]");
                     std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->select(
                         std::vector{i, j, minIndex}, {{"i", i}, {"j", j}, {"minIndex", minIndex}});
                     // }
@@ -56,7 +56,7 @@ namespace dsandbox
                     {
                         // trace {
                         std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
-                            "setting index minIndex to index j");
+                            "array[j] < array[minIndex], setting minIndex to j");
                         std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->capture_state(
                             {{"i", i}, {"j", j}, {"minIndex", minIndex}});
                         // }
@@ -65,7 +65,7 @@ namespace dsandbox
                 }
                 // trace {
                 std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
-                    "swapping values at indexes i and minIndex");
+                    "swapping array[i] and array[minIndex]");
                 std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->swap(
                     i, minIndex, {{"i", i}, {"j", j}, {"minIndex", minIndex}});
                 // }

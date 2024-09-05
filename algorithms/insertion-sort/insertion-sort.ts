@@ -34,7 +34,7 @@ export default class Snippet {
       let j = i - 1;
 
       // trace {
-      (this.tracers.get("Log") as LogTracer).print("comparing values at indexes i and j");
+      (this.tracers.get("Log") as LogTracer).print("comparing array[j] and key");
       (this.tracers.get("Array") as Array1DTracer).select([i, j], {
         i: i,
         j: j,
@@ -43,7 +43,7 @@ export default class Snippet {
       // }
       while (j >= 0 && array[j] > key) {
         // trace {
-        (this.tracers.get("Log") as LogTracer).print("moving value greater than key value one index to right");
+        (this.tracers.get("Log") as LogTracer).print("array[j] > key, setting array[j] to array[j + 1]");
         (this.tracers.get("Array") as Array1DTracer).update(j + 1, array[j], {
           i: i,
           j: j,
@@ -54,7 +54,7 @@ export default class Snippet {
         j--;
       }
       // trace {
-      (this.tracers.get("Log") as LogTracer).print("updating value at index j to key value");
+      (this.tracers.get("Log") as LogTracer).print("setting array[j] to key");
       (this.tracers.get("Array") as Array1DTracer).update(j + 1, key, {
         i: i,
         j: j,

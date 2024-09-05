@@ -36,7 +36,7 @@ export default class Snippet {
 
       for (j = i + 1; j < n; j++) {
         // trace {
-        (this.tracers.get("Log") as LogTracer).print("comparing values at indexes j and minIndex");
+        (this.tracers.get("Log") as LogTracer).print("comparing array[j] and array[minIndex]");
         (this.tracers.get("Array") as Array1DTracer).select([i, j, minIndex], {
           i: i,
           j: j,
@@ -45,7 +45,7 @@ export default class Snippet {
         // }
         if (array[j] < array[minIndex]) {
           // trace {
-          (this.tracers.get("Log") as LogTracer).print("setting index minIndex to index j");
+          (this.tracers.get("Log") as LogTracer).print("array[j] < array[minIndex], setting minIndex to j");
           (this.tracers.get("Array") as Array1DTracer).captureState({
             i: i,
             j: j,
@@ -56,7 +56,7 @@ export default class Snippet {
         }
       }
       // trace {
-      (this.tracers.get("Log") as LogTracer).print("swapping values at indexes i and minIndex");
+      (this.tracers.get("Log") as LogTracer).print("swapping array[i] and array[minIndex]");
       (this.tracers.get("Array") as Array1DTracer).swap(i, minIndex, {
         i: i,
         j: j,

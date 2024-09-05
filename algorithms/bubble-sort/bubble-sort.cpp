@@ -44,7 +44,7 @@ namespace dsandbox
                 {
                     // trace {
                     std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
-                        "comparing values at indexes j and j + 1");
+                        "comparing array[j] and array[j + 1]");
                     std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->select(
                         std::vector{i, j, j + 1}, {{"i", i}, {"j", j}});
                     // }
@@ -52,7 +52,7 @@ namespace dsandbox
                     {
                         // trace {
                         std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
-                            "swapping values at indexes j and j + 1");
+                            "array[j] > array[j + 1], swapping array[j] and array[j + 1]");
                         std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->swap(
                             j, j + 1, {{"i", i}, {"j", j}});
                         // }
