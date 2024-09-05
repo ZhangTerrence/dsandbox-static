@@ -47,7 +47,7 @@ namespace dsandbox
                 std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
                     "comparing array[j] and key");
                 std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->select(
-                    std::vector{i, j}, {{"i", i}, {"j", j}, {"key": key});
+                    std::vector{i, j}, {{"i", i}, {"j", j}, {"key", key}});
                 // }
                 while (j >= 0 && array[j] > key)
                 {
@@ -55,7 +55,7 @@ namespace dsandbox
                     std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
                         "array[j] > key, setting array[j] to array[j + 1]");
                     std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->update(
-                        j + 1, array[j], {{"i", i}, {"j", j}, {"key": key});
+                        j + 1, array[j], {{"i", i}, {"j", j}, {"key", key}});
                     // }
                     array[j + 1] = array[j];
                     j--;
@@ -64,7 +64,7 @@ namespace dsandbox
                 std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
                     "setting array[j] to key");
                 std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->update(
-                    j + 1, key, {{"i", i}, {"j", j}, {"key": key});
+                    j + 1, key, {{"i", i}, {"j", j}, {"key", key}});
                 // }
                 array[j + 1] = key;
 
