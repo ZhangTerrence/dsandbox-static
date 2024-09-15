@@ -32,7 +32,7 @@ export default class Snippet {
     for (let i = 0; i < n - 1; i++) {
       for (let j = 0; j < n - i - 1; j++) {
         // trace {
-        (this.tracers.get("Log") as LogTracer).print("comparing array[j] and array[j + 1]");
+        (this.tracers.get("Log") as LogTracer).print(`comparing array[${j}] and array[${j + 1}]`);
         (this.tracers.get("Array") as Array1DTracer).select([i, j, j + 1], {
           i: i,
           j: j,
@@ -40,7 +40,9 @@ export default class Snippet {
         // }
         if (array[j] > array[j + 1]) {
           // trace {
-          (this.tracers.get("Log") as LogTracer).print("array[j] > array[j + 1], swapping array[j] and array[j + 1]");
+          (this.tracers.get("Log") as LogTracer).print(
+            `array[${j}] > array[${j + 1}], swapping array[${j}] and array[${j + 1}]`,
+          );
           (this.tracers.get("Array") as Array1DTracer).swap(j, j + 1, {
             i: i,
             j: j,

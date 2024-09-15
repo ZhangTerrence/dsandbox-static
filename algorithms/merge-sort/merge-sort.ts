@@ -36,14 +36,12 @@ export default class Snippet {
     (this.tracers.get("Chart") as ChartTracer).fromArray1DTracer(this.tracers.get("Array") as Array1DTracer);
   }
 
-  merge(array: Array<number>, left: number, middle: number, right: number) {
+  merge(array: Array<number>, left: number, middle: number, right: number): void {
     const n1 = middle - left + 1;
     const n2 = right - middle;
     // trace {
     (this.tracers.get("Log") as LogTracer).print(`sorting array[${left}...${right + 1}]`);
-    (this.tracers.get("Array") as Array1DTracer).select(
-      [...new Array(middle + n2 + 1 - left).keys()].map((i) => left + i),
-    );
+    (this.tracers.get("Array") as Array1DTracer).select([...new Array(right - left + 1).keys()].map((i) => left + i));
     (this.tracers.get("Buffer") as Array1DTracer).nop();
     // }
 
@@ -52,11 +50,9 @@ export default class Snippet {
 
     // trace {
     (this.tracers.get("Log") as LogTracer).print(
-      `copying array[${left}...${middle + n2 + 1}] to buffer${left}...${middle + n2 + 1}]`,
+      `copying array[${left}...${right + 1}] to buffer${left}...${right + 1}]`,
     );
-    (this.tracers.get("Array") as Array1DTracer).select(
-      [...new Array(middle + 1 + n2 - left).keys()].map((i) => left + i),
-    );
+    (this.tracers.get("Array") as Array1DTracer).select([...new Array(right - left + 1).keys()].map((i) => left + i));
     // }
     for (let i = 0; i < n1; i++) {
       // trace {
@@ -76,9 +72,7 @@ export default class Snippet {
 
     // trace {
     (this.tracers.get("Log") as LogTracer).print(`L: [${L.join(", ")}]; R: [${R.join(", ")}]`);
-    (this.tracers.get("Array") as Array1DTracer).select(
-      [...new Array(middle + n2 + 1 - left).keys()].map((i) => left + i),
-    );
+    (this.tracers.get("Array") as Array1DTracer).select([...new Array(right - left + 1).keys()].map((i) => left + i));
     (this.tracers.get("Buffer") as Array1DTracer).nop();
     // }
 
@@ -92,7 +86,7 @@ export default class Snippet {
         (this.tracers.get("Log") as LogTracer).print(`L[${i}] <= R[${j}], setting array[${k}] to L[${i}]`);
         (this.tracers.get("Array") as Array1DTracer).update(k, L[i], {
           k: k,
-          selected: [...new Array(middle + n2 + 1 - left).keys()].map((i) => left + i),
+          selected: [...new Array(right - left + 1).keys()].map((i) => left + i),
         });
         (this.tracers.get("Buffer") as Array1DTracer).select([left + i, middle + j + 1], {
           [`L[${i}]`]: left + i,
@@ -106,7 +100,7 @@ export default class Snippet {
         (this.tracers.get("Log") as LogTracer).print(`L[${i}] > R[${j}], setting array[${k}] to R[${j}]`);
         (this.tracers.get("Array") as Array1DTracer).update(k, R[j], {
           k: k,
-          selected: [...new Array(middle + n2 + 1 - left).keys()].map((i) => left + i),
+          selected: [...new Array(right - left + 1).keys()].map((i) => left + i),
         });
         (this.tracers.get("Buffer") as Array1DTracer).select([left + i, middle + j + 1], {
           [`L[${i}]`]: left + i,
@@ -135,7 +129,7 @@ export default class Snippet {
     }
     // trace {
     (this.tracers.get("Array") as Array1DTracer).captureState({
-      selected: [...new Array(middle + n2 + 1 - left).keys()].map((i) => left + i),
+      selected: [...new Array(right - left + 1).keys()].map((i) => left + i),
     });
     // }
 
@@ -155,7 +149,7 @@ export default class Snippet {
     }
     // trace {
     (this.tracers.get("Array") as Array1DTracer).captureState({
-      selected: [...new Array(middle + n2 + 1 - left).keys()].map((i) => left + i),
+      selected: [...new Array(right - left + 1).keys()].map((i) => left + i),
     });
     // }
 

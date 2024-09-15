@@ -23,13 +23,13 @@ namespace dsandbox
             std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->set_array(array);
 
             // trace {
-            std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(template_string(std::vector<std::string>{"initial array - ", to_array_string(array)}));
+            std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(template_string({"initial array - ", to_array_string(array)}));
             std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->nop();
             // }
             int const n = array.size();
             quick_sort(array, 0, n - 1);
             // trace {
-            std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(template_string(std::vector<std::string>{"sorted array - ", to_array_string(array)}));
+            std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(template_string({"sorted array - ", to_array_string(array)}));
             std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->nop();
             // }
 
@@ -70,7 +70,7 @@ namespace dsandbox
                 {
                     // trace {
                     std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(template_string({"updated array - ", to_array_string(array)}));
-                    std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->select(generate_range(left, right + 1), {{"i", i}, {"j", j}, {"pivot", left}});
+                    std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->nop();
                     // }
                     return j;
                 }

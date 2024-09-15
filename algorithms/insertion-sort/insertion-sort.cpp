@@ -2,7 +2,6 @@
 #include "tracers/Array1DTracer.hpp"
 #include "tracers/ChartTracer.hpp"
 #include "tracers/LogTracer.hpp"
-
 #include "utilities.hpp"
 
 namespace dsandbox
@@ -25,8 +24,7 @@ namespace dsandbox
 
             insertion_sort(array);
 
-            std::dynamic_pointer_cast<ChartTracer>(this->tracers->get("Chart"))->from_array_1d_tracer(
-                *std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array")));
+            std::dynamic_pointer_cast<ChartTracer>(this->tracers->get("Chart"))->from_array_1d_tracer(*std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array")));
         }
 
         void insertion_sort(std::vector<int> array) const
@@ -34,8 +32,7 @@ namespace dsandbox
             int const n = array.size();
 
             // trace {
-            std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
-                template_string(std::vector<std::string>{"initial array - ", to_array_string(array)}));
+            std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(template_string({"initial array - ", to_array_string(array)}));
             std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->capture_state({});
             // }
             for (int i = 1; i < n; i++)
@@ -44,41 +41,31 @@ namespace dsandbox
                 int j = i - 1;
 
                 // trace {
-                std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
-                    "comparing array[j] and key");
-                std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->select(
-                    std::vector{i, j}, {{"i", i}, {"j", j}, {"key", key}});
+                std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(template_string({"comparing array[", std::to_string(j), "] and ", std::to_string(key)}));
+                std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->select({i, j}, {{"i", i}, {"j", j}, {"key", key}});
                 // }
                 while (j >= 0 && array[j] > key)
                 {
                     // trace {
-                    std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
-                        "array[j] > key, setting array[j] to array[j + 1]");
-                    std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->update(
-                        j + 1, array[j], {{"i", i}, {"j", j}, {"key", key}});
+                    std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(template_string({"array[", std::to_string(j), "] > ", std::to_string(key), ", setting array[", std::to_string(j), "] to array[", std::to_string(j + 1), "]"}));
+                    std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->update(j + 1, array[j], {{"i", i}, {"j", j}, {"key", key}});
                     // }
                     array[j + 1] = array[j];
                     j--;
                 }
                 // trace {
-                std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
-                    "setting array[j] to key");
-                std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->update(
-                    j + 1, key, {{"i", i}, {"j", j}, {"key", key}});
+                std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(template_string({"setting array[", std::to_string(j), "] to ", std::to_string(key)}));
+                std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->update(j + 1, key, {{"i", i}, {"j", j}, {"key", key}});
                 // }
                 array[j + 1] = key;
 
                 // trace {
-                std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
-                    template_string(std::vector<std::string>{"updated array - ", to_array_string(array)}));
-                std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->capture_state({
-                    {"i", i}, {"j", j}
-                });
+                std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(template_string({"updated array - ", to_array_string(array)}));
+                std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->capture_state({{"i", i}, {"j", j}});
                 // }
             }
             // trace {
-            std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(
-                template_string(std::vector<std::string>{"sorted array - ", to_array_string(array)}));
+            std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(template_string({"sorted array - ", to_array_string(array)}));
             std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->capture_state({});
             // }
         }
