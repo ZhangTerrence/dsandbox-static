@@ -1,3 +1,3 @@
 # dsandbox-static
 
-Static files for dsandbox.
+Static snippet files for dsandbox.
