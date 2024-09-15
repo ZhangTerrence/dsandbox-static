@@ -42,7 +42,7 @@ export default class Snippet {
       {
         i: i,
         j: j,
-        pivot: left,
+        pivot: pivot,
       },
     );
     // }
@@ -56,7 +56,7 @@ export default class Snippet {
           {
             i: i,
             j: j,
-            pivot: left,
+            pivot: pivot,
           },
         );
         // }
@@ -71,7 +71,7 @@ export default class Snippet {
           {
             i: i,
             j: j,
-            pivot: left,
+            pivot: pivot,
           },
         );
         // }
@@ -81,14 +81,7 @@ export default class Snippet {
       if (i >= j) {
         // trace {
         (this.tracers.get("Log") as LogTracer).print(`updated array - [${array.join(", ")}]`);
-        (this.tracers.get("Array") as Array1DTracer).select(
-          [...new Array(right - left + 1).keys()].map((i) => left + i),
-          {
-            i: i,
-            j: j,
-            pivot: left,
-          },
-        );
+        (this.tracers.get("Array") as Array1DTracer).nop();
         // }
         return j;
       }
@@ -98,7 +91,7 @@ export default class Snippet {
       (this.tracers.get("Array") as Array1DTracer).swap(i, j, {
         i: i,
         j: j,
-        pivot: left,
+        pivot: pivot,
       });
       // }
       [array[i], array[j]] = [array[j], array[i]];

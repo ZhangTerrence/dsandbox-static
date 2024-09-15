@@ -43,7 +43,7 @@ namespace dsandbox
             int j = right + 1;
             // trace {
             std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(template_string({"sorting array[", std::to_string(left), "...", std::to_string(right + 1), "]"}));
-            std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->select(generate_range(left, right + 1), {{"i", i}, {"j", j}, {"pivot", left}});
+            std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->select(generate_range(left, right + 1), {{"i", i}, {"j", j}, {"pivot", pivot}});
             // }
 
             while (true)
@@ -52,7 +52,7 @@ namespace dsandbox
                 {
                     // trace {
                     std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(template_string({"array[", std::to_string(i), "] < ", std::to_string(pivot), ", incrementing i"}));
-                    std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->select(generate_range(left, right + 1), {{"i", i}, {"j", j}, {"pivot", left}});
+                    std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->select(generate_range(left, right + 1), {{"i", i}, {"j", j}, {"pivot", pivot}});
                     // }
                     i++;
                 } while (array[i] < pivot);
@@ -61,7 +61,7 @@ namespace dsandbox
                 {
                     // trace {
                     std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(template_string({"array[", std::to_string(j), "] > ", std::to_string(pivot), ", decrementing i"}));
-                    std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->select(generate_range(left, right + 1), {{"i", i}, {"j", j}, {"pivot", left}});
+                    std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->select(generate_range(left, right + 1), {{"i", i}, {"j", j}, {"pivot", pivot}});
                     // }
                     j--;
                 } while (array[j] > pivot);
@@ -77,7 +77,7 @@ namespace dsandbox
 
                 // trace {
                 std::dynamic_pointer_cast<LogTracer>(this->tracers->get("Log"))->print(template_string({std::to_string(i), " < ", std::to_string(j), ", swapping array[", std::to_string(i), "] and array[", std::to_string(j), "]"}));
-                std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->swap(i, j, {{"i", i}, {"j", j}, {"pivot", left}});
+                std::dynamic_pointer_cast<Array1DTracer>(this->tracers->get("Array"))->swap(i, j, {{"i", i}, {"j", j}, {"pivot", pivot}});
                 // }
                 std::swap(array[i], array[j]);
             }
